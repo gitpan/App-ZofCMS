@@ -1,0 +1,374 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+our $VERSION = '0.0101';
+use lib '../lib';
+use Getopt::Long;
+use File::Path;
+use File::Copy;
+
+require File::Spec;
+
+
+my %opts = (
+    site    => 'zcms',
+    core    => '',
+    plugins => '',
+    nocore  => '',
+);
+
+GetOptions(
+    'site=s'    => \ $opts{site},
+    'core=s'    => \ $opts{core},
+    'plugins=s' => \ $opts{plugins},
+    'nocore'   => \ $opts{nocore},
+);
+
+$opts{core} = $opts{site} . '_site'
+    unless length $opts{core};
+
+
+@opts{ qw/core_modules data templates/ } = (
+    File::Spec->catdir( $opts{core}, 'App', 'ZofCMS' ),
+    File::Spec->catdir( $opts{core}, 'data' ),
+    File::Spec->catdir( $opts{core}, 'templates' ),
+);
+
+@opts{ qw/plug_dir execs/ } = (
+    File::Spec->catdir( $opts{core_modules}, 'Plugins' ),
+    File::Spec->catdir( $opts{core_modules}, 'Execs' ),
+);
+
+
+my @dirs_created = mkpath(
+    [ @opts{ qw/site data templates plug_dir execs/ } ],
+    1, 0777
+);
+
+if ( $opts{plugins} ) {
+    prepare_plugins( @opts{qw/core plugins/} );
+    exit
+        if $opts{nocore};
+}
+
+@opts{ qw/index base index_tmpl index_html_tmpl 404  config_file/ } = (
+    File::Spec->catfile( $opts{site}, 'index.pl' ),
+    File::Spec->catfile( $opts{core}, 'data', 'base.tmpl' ),
+    File::Spec->catfile( $opts{core}, 'templates', 'index.tmpl' ),
+    File::Spec->catfile( $opts{core}, 'data', 'index.tmpl' ),
+    File::Spec->catfile( $opts{core}, 'templates', '404.tmpl' ),
+    File::Spec->catfile( $opts{core}, 'config.txt' ),
+);
+
+open my $fh, '>', $opts{index}
+    or die "Failed to open/create $opts{index} [$!]";
+
+print $fh make_index_pl( $opts{core} );
+close $fh;
+chmod 0755, $opts{index};
+
+open $fh, '>', $opts{base}
+    or die "Failed to open/create $opts{base} [$!]";
+
+print $fh make_base();
+
+open $fh, '>', $opts{index_tmpl}
+    or die "Failed to open/create $opts{index_tmpl} [$!]";
+
+print $fh make_index_tmpl();
+
+
+open $fh, '>', $opts{index_html_tmpl}
+    or die "Failed to open/create $opts{index_html_tmpl} [$!]";
+
+print $fh make_index_html_tmpl();
+
+
+open $fh, '>', $opts{404}
+    or die "Failed to open/create $opts{404} [$!]";
+
+print $fh make_404();
+
+
+open $fh, '>', $opts{config_file}
+    or die "Failed to open/create $opts{config_file} [$!]";
+
+print $fh make_config_file( $opts{core} );
+
+
+copy_module( $_, $opts{core} )
+    for qw/
+        App::ZofCMS::Config
+        App::ZofCMS::Template
+        App::ZofCMS::Output
+    /;
+
+sub prepare_plugins {
+    my ( $core, $plugins ) = @_;
+    my @plugins = map "App::ZofCMS::Plugin::$_", split ' ', $plugins;
+
+    copy_module( $_, $core)
+        for @plugins;
+}
+
+sub copy_module {
+    my ( $mod, $core ) = @_;
+    eval "use $mod;";
+    if ( $@ ) {
+        print "ERROR: $@\n";
+        return;
+    }
+
+    my $mod_file = $mod . '.pm';
+    $mod_file =~ s|::|/|g;
+
+    my $core_mod_file = File::Spec->catfile( $core, $mod_file );
+
+    copy $INC{$mod_file}, $core_mod_file
+        or print "ERROR: failed to copy $mod [$!]";
+}
+
+sub make_index_pl {
+    my $core = '../' . shift;
+    if ( substr($core, -1) eq '/' ) {
+        $core = substr $core, 0, -1;
+    }
+    my $code = <<'END_CODE';
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use lib '[{LIB}]';
+use App::ZofCMS::Config;
+use App::ZofCMS::Template;
+use App::ZofCMS::Output;
+
+use CGI::Carp qw/fatalsToBrowser/;
+
+my $config = App::ZofCMS::Config->new;
+
+my $conf = $config->load( '[{CONFIG}]' );
+
+my $template;
+
+RELOADS: {
+    $template = App::ZofCMS::Template->new( $config );
+
+    $template->load;
+    $template->prepare_defaults;
+    $template->execute_before;
+    $template->assemble;
+    $template->execute
+        or redo RELOADS;
+}
+
+my $output = App::ZofCMS::Output->new( $config, $template );
+print $output->headers;
+print $output->output;
+exit;
+END_CODE
+
+    $code =~ s/\Q[{LIB}]/$core/;
+    $code =~ s|\Q[{CONFIG}]|${core}/config.txt|;
+    return $code;
+}
+
+sub make_base {
+    return <<'END_HTML';
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title><tmpl_var name="title"></title>
+
+<div id="main">
+    <tmpl_var name="body">
+</div>
+END_HTML
+}
+
+sub make_index_tmpl {
+    return <<'END_CODE';
+{
+    body => \'index.tmpl',
+    title => '',
+}
+END_CODE
+}
+
+sub make_index_html_tmpl {
+    return 'Fill me up!'
+}
+
+sub make_404 {
+    return <<'END_CODE';
+{
+    body => q|<p>The page you've tried to access does not exist or was moved</p>|,
+    title => '404 - Page Not Found',
+}
+END_CODE
+}
+
+sub make_config_file {
+    my $core_dir = shift;
+    return <<"END_CONFIG";
+{
+    valid_pages => {
+        dirs => [
+            '/'
+        ],
+    },
+    data_store => '../$core_dir/data',
+    templates    => '../$core_dir/templates',
+    template_defaults => {
+        conf => {
+            base => 'base.tmpl',
+        },
+    },
+}
+END_CONFIG
+}
+
+1;
+__END__
+
+=head1 NAME
+
+zofcms_helper - helper script for ZofCMS web-framework/templating system
+
+=head1 SYNOPSYS
+
+mkdir site_dir;
+cd site_dir;
+zofcms_helper --site example --plugins QueryToTemplate DBI SomeOtherPlugin;
+
+=head1 DESCRIPTION
+
+C<zofcms_helper> is a helper script supplied with L<App::ZofCMS>. It is used
+to create "startup" structure for your site as well as adding plugin files,
+which isn't necessary if you installed them on your server via CPAN.
+
+=head1 SUPPORTED ARGUMENTS
+
+=head2 C<--site>
+
+    zofcms_helper --site example
+
+The C<--site> argument specifies the directory to use for your web
+accessible directory of ZofCMS, this is where you'll have your C<index.pl>
+file (the helper script will create it). If you don't specify the
+C<--core> argument (see below) it will automatically created from the
+C<--site> argument by appending C<_site> to whatever you specify. If you
+don't provide C<--site> argument, the default is C<zcms>.
+
+=head2 C<--core>
+
+    zofcms_helper --site example --core example_core
+
+The C<--core> argument specifies the name of directory for the "data"
+directory of ZofCMS, in other words, this is web-inaccessible directory
+in which you will have your config file, "data_storage" and "templates"
+directory (see L<App::ZofCMS::Config> for description) as well as
+any of ZofCMS plugins. The helper script creates config file, all of those
+directories as well as directory C<Execs> (see L<App::ZofCMS::Template>)
+and C<Extras> (see L<App::ZofCMS::Extras>). The helper script also creates
+basic C<base.tmpl>, C<index.tmpl> and C<404.tmpl> in C<data/> directory
+inside the directory specified by C<--core> as well as basic
+C<index.tmpl> inside C<templates/> directory. If C<--core> parameter is not
+specified it will be created by appending C<_site> to whatever you've
+gave to C<--site> argument.
+
+B<Note:> currently there is no support [in the helper script]
+to have C<--core> point to a directory on a different level than C<--site>.
+If you desperatelly need this please let me know and I will add that
+support. For now, you can simply edit the created C<index.pl> file, in
+particular it's two lines:
+
+    use lib '../core_dir';
+    
+    ....
+
+    my $conf = $config->load( '../core_dir/config.txt' );
+
+
+=head2 C<--plugins>
+
+    zofcms_helper --site zcms --plugins DBI QueryToTemplate OtherPlugin
+
+This options takes a white-space separated list of plugin names to copy
+over into your "core" directory. This is useful if your server does
+not support module installation from CPAN; i.e. the helper script
+copies the modules installed on your system into "core" directory from
+where ZofCMS can load them, thus when you are done with your site you
+can simply upload C<--site> and C<--core> directories to your server and
+everything should work just fine.
+
+B<NOTE:> do not include the C<App::ZofCMS::Plugin::> part of the name
+of the modules, the above command installs L<App::ZofCMS::Plugin::DBI>,
+L<App::ZofCMS::Plugin::QueryToTemplate> and
+C<App::ZofCMS::Plugin::OtherPlugin> modules into the "core" directory.
+
+B<Note:> the command presented above will recreate the "core" files and
+C<index.pl> file. To avoid that, i.e. just add the plugins, use the
+<--nocore> option
+
+=head2 <--nocore>
+
+    zofcms_helper --nocore --site zcms --plugins DBI QueryToTemplate
+
+The C<--nocore> option tells the helper script not to create any "core"
+directories or files, the command above will only install C<DBI> and
+C<QueryToTemplate> plugins into the "core" directory.
+
+=head1 AUTHOR
+
+Zoffix Znet, C<< <zoffix at cpan.org> >>
+(L<http://zoffix.com>, L<http://haslayout.net>)
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-app-zofcms at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-ZofCMS>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc App::ZofCMS
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-ZofCMS>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/App-ZofCMS>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/App-ZofCMS>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/App-ZofCMS>
+
+=back
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2008 Zoffix Znet, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+
+=cut
+

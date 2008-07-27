@@ -1,0 +1,36 @@
+---
+name: App-ZofCMS
+version: 0.0101
+author:
+  - 'Zoffix Znet <zoffix@cpan.org>'
+abstract: web framework and templating system for small-medium sites.
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  CGI: 3.15
+  CGI::Carp: 1.29
+  Carp: 1.04
+  File::Copy: 2.09
+  File::Path: 1.08
+  File::Spec: 3.2701
+  Getopt::Long: 2.35
+  HTML::Template: 2.9
+build_requires:
+  Test::More: 0
+provides:
+  App::ZofCMS:
+    file: lib/App/ZofCMS.pm
+    version: 0.0101
+  App::ZofCMS::Config:
+    file: lib/App/ZofCMS/Config.pm
+    version: 0.0101
+  App::ZofCMS::Output:
+    file: lib/App/ZofCMS/Output.pm
+  App::ZofCMS::Template:
+    file: lib/App/ZofCMS/Template.pm
+    version: 0.0101
+generated_by: Module::Build version 0.2808
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
