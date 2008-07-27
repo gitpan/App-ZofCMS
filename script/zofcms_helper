@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0102';
+our $VERSION = '0.0103';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -17,23 +17,26 @@ my %opts = (
     core    => '',
     plugins => '',
     nocore  => '',
+    cpan    => '',
 );
 
 GetOptions(
     'site=s'    => \ $opts{site},
     'core=s'    => \ $opts{core},
     'plugins=s' => \ $opts{plugins},
-    'nocore'   => \ $opts{nocore},
+    'nocore'    => \ $opts{nocore},
+    'cpan=s'    => \ $opts{cpan},
 );
 
 $opts{core} = $opts{site} . '_site'
     unless length $opts{core};
 
 
-@opts{ qw/core_modules data templates/ } = (
+@opts{ qw/core_modules data templates cpan_dir/ } = (
     File::Spec->catdir( $opts{core}, 'App', 'ZofCMS' ),
     File::Spec->catdir( $opts{core}, 'data' ),
     File::Spec->catdir( $opts{core}, 'templates' ),
+    File::Spec->catdir( $opts{core}, 'CPAN' ),
 );
 
 @opts{ qw/plug_dir execs/ } = (
@@ -42,10 +45,14 @@ $opts{core} = $opts{site} . '_site'
 );
 
 
-my @dirs_created = mkpath(
-    [ @opts{ qw/site data templates plug_dir execs/ } ],
+mkpath(
+    [ @opts{ qw/site data templates plug_dir execs  cpan_dir/ } ],
     1, 0777
 );
+
+if ( $opts{cpan} ) {
+    prepare_cpan( @opts{ qw/core cpan/} );
+}
 
 if ( $opts{plugins} ) {
     prepare_plugins( @opts{qw/core plugins/} );
@@ -107,10 +114,26 @@ copy_module( $_, $opts{core} )
 
 sub prepare_plugins {
     my ( $core, $plugins ) = @_;
-    my @plugins = map "App::ZofCMS::Plugin::$_", split ' ', $plugins;
+    my @plugins = map "App::ZofCMS::Plugin::$_", split ',', $plugins;
 
     copy_module( $_, $core)
         for @plugins;
+}
+
+sub prepare_cpan {
+    my ( $core, $mods ) = @_;
+    my @mods = split ',', $mods;
+
+    my @paths;
+    for ( @mods ) {
+        my @bits = split /::/;
+        pop @bits;
+        push @paths, File::Spec->catdir( $core, 'CPAN', @bits );
+    }
+    mkpath( \@paths, 1, 0777 );
+
+    copy_module( $_, File::Spec->catdir($core, 'CPAN') )
+        for @mods;
 }
 
 sub copy_module {
@@ -142,6 +165,7 @@ use strict;
 use warnings;
 
 use lib '[{LIB}]';
+use lib '[{LIB}]/CPAN';
 use App::ZofCMS::Config;
 use App::ZofCMS::Template;
 use App::ZofCMS::Output;
@@ -171,7 +195,7 @@ print $output->output;
 exit;
 END_CODE
 
-    $code =~ s/\Q[{LIB}]/$core/;
+    $code =~ s/\Q[{LIB}]/$core/g;
     $code =~ s|\Q[{CONFIG}]|${core}/config.txt|;
     return $code;
 }
@@ -243,7 +267,7 @@ zofcms_helper - helper script for ZofCMS web-framework/templating system
 
 mkdir site_dir;
 cd site_dir;
-zofcms_helper --site example --plugins QueryToTemplate DBI SomeOtherPlugin;
+zofcms_helper --site example --plugins QueryToTemplate,DBI,SomeOtherPlugin;
 
 =head1 DESCRIPTION
 
@@ -296,9 +320,9 @@ particular it's two lines:
 
 =head2 C<--plugins>
 
-    zofcms_helper --site zcms --plugins DBI QueryToTemplate OtherPlugin
+    zofcms_helper --site zcms --plugins DBI,QueryToTemplate,OtherPlugin
 
-This options takes a white-space separated list of plugin names to copy
+This options takes a comma (C<,>) separated list of plugin names to copy
 over into your "core" directory. This is useful if your server does
 not support module installation from CPAN; i.e. the helper script
 copies the modules installed on your system into "core" directory from
@@ -315,9 +339,23 @@ B<Note:> the command presented above will recreate the "core" files and
 C<index.pl> file. To avoid that, i.e. just add the plugins, use the
 <--nocore> option
 
-=head2 <--nocore>
+=head2 C<--cpan>
 
-    zofcms_helper --nocore --site zcms --plugins DBI QueryToTemplate
+    zofcms_helper --site zcms --cpan Data::Tranformer,Foo::Bar::Baz
+
+This option has the same purpose as the C<--plugins> except this one
+copies your installed CPAN modules to $core_dir/CPAN/
+
+For example, Data::Transformer module is required by L<App::ZofCMS::Tagged>
+plugin, using the C<--cpan> command you can copy it over into ZofCMS
+"core directory" and upload your application to the server that does
+not have Data::Transformer installed. B<Note:> this option is not that
+smart, it's not going to copy anything but the actual .pm file for
+the module you've specified.
+
+=head2 C<--nocore>
+
+    zofcms_helper --nocore --site zcms --plugins DBI,QueryToTemplate
 
 The C<--nocore> option tells the helper script not to create any "core"
 directories or files, the command above will only install C<DBI> and

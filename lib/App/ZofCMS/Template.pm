@@ -190,15 +190,11 @@ sub _exec_plugins {
     my @plugins = @{ $template->{plugins} || [] };
 
     for ( @plugins ) {
-        my $plugin_config;
-        if ( ref eq 'ARRAY' ) {
-            ( $_, $plugin_config ) = @$_;
-        }
         my $plugin = "App::ZofCMS::Plugin::$_";
         eval "use $plugin";
         $@ and croak "Failed to use() plugin $plugin: $@";
 
-        $plugin->new->process( $template, $query, $config, $plugin_config );
+        $plugin->new->process( $template, $query, $config );
     }
 
     return;

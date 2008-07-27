@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use Carp;
 
+our $VERSION = '0.0101';
+
 sub new {
     my ( $class, $config, $template ) = @_;
     my $self = bless {}, $class;
