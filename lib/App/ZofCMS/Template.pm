@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0101';
+our $VERSION = '0.0102';
 
 use HTML::Template;
 
@@ -194,7 +194,7 @@ sub _exec_plugins {
         if ( ref eq 'ARRAY' ) {
             ( $_, $plugin_config ) = @$_;
         }
-        my $plugin = "App::ZofCMS::Plugins::$_";
+        my $plugin = "App::ZofCMS::Plugin::$_";
         eval "use $plugin";
         $@ and croak "Failed to use() plugin $plugin: $@";
 

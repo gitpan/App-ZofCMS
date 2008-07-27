@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0101';
+our $VERSION = '0.0102';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -37,7 +37,7 @@ $opts{core} = $opts{site} . '_site'
 );
 
 @opts{ qw/plug_dir execs/ } = (
-    File::Spec->catdir( $opts{core_modules}, 'Plugins' ),
+    File::Spec->catdir( $opts{core_modules}, 'Plugin' ),
     File::Spec->catdir( $opts{core_modules}, 'Execs' ),
 );
 

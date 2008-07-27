@@ -1,5 +1,10 @@
 Revision history for App-ZofCMS
 
+0.0102  July 27, 2008
+        Fixed incorrect path setup with helper script.
+        Fixed incorrect plugins module names which
+        prevented plugin usage
+
 0.0101  July 26, 2008
         First version, released on an unsuspecting world.
 
