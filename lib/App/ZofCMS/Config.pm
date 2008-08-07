@@ -3,7 +3,7 @@ package App::ZofCMS::Config;
 use warnings;
 use strict;
 
-our $VERSION = '0.0101';
+our $VERSION = '0.0102';
 
 use CGI qw/:standard Vars/;
 use Carp;
@@ -72,7 +72,7 @@ sub _prepare_query {
     }
 
     if ( $query{page} =~ m|/| ) {
-        ( $query{dir}, $query{page} ) = $query{page} =~ m|(.+/)([^/]*)$|;
+        ( $query{dir}, $query{page} ) = $query{page} =~ m|(.*/)([^/]*)$|;
     }
 
     unless ( defined $query{page} and length $query{page} ) {
