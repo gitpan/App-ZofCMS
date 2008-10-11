@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0102';
+our $VERSION = '0.0103';
 
 use HTML::Template;
 
@@ -202,22 +202,25 @@ sub _exec_plugins {
 
 sub sort_plugins {
     my $self = shift;
-    my ( $template_plugins , $dir_defaults_plugins, $conf_plugins ) = @_;
+    my ( $conf_plugins, $dir_defaults_plugins, $template_plugins, ) = @_;
 
     for my $plugs (
         $template_plugins , $dir_defaults_plugins, $conf_plugins
     ) {
+
         for ( @$plugs ) {
+
             unless ( ref ) {
                 $_ = { name => $_,  priority => 10000, };
                 next;
             }
 
             @{ $_={} }{ qw/name priority/ } = %$_
-                if ref eq 'HASH';
+                if ref eq 'HASH' and 1 == keys %$_;
         }
     }
-    return [
+
+    my $r  = [
         map $_->{name},
         sort {
             $a->{priority}
@@ -227,9 +230,10 @@ sub sort_plugins {
         $self->uniq_plugins(
             @$template_plugins,
             @$dir_defaults_plugins,
-            @$conf_plugins
+            @$conf_plugins,
         )
-    ]
+    ];
+    return $r;
 }
 
 sub uniq_plugins {

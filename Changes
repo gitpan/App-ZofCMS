@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0105  August 6, 2008
+        Fixed the bug that prevented use of 'plugins' key in 'template_defaults' in config file
+
 0.0104  August 6, 2008
         Fixed the bug where 'page=/foo' would transform into
         'dir=/&page=index' instead of 'dir=/&page=foo'
