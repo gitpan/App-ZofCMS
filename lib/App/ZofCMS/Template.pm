@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0103';
+our $VERSION = '0.0104';
 
 use HTML::Template;
 
@@ -32,7 +32,7 @@ sub load {
     my $template_file = File::Spec->catfile(
         $conf->{templates},
         $query->{dir},
-        $query->{page} . '.tmpl',
+        $query->{page} . $conf->{zcms_template_extension},
     );
     
     my $template = do $template_file

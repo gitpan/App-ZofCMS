@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0106  October 25, 2008
+        Added an option to configure ZofCMS Template file extensions
+
 0.0105  August 6, 2008
         Fixed the bug that prevented use of 'plugins' key in 'template_defaults' in config file
 

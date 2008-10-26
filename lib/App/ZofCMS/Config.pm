@@ -3,7 +3,7 @@ package App::ZofCMS::Config;
 use warnings;
 use strict;
 
-our $VERSION = '0.0102';
+our $VERSION = '0.0103';
 
 use CGI qw/:standard Vars/;
 use Carp;
@@ -27,11 +27,14 @@ sub load {
     my $conf = do $conf_file
         or croak "Failed to load config file ($!) ($@)";
 
+    defined $conf->{zcms_template_extension}
+        or $conf->{zcms_template_extension} = '.tmpl';
+
     unless ( $no_page_check ) {
         my $query = $self->query;
         my $is_valid_page = $self->_is_valid_page(
             $query,
-            @$conf{ qw/templates valid_pages/ }
+            $conf,
         );
         
         unless ( $is_valid_page ) {
@@ -43,7 +46,11 @@ sub load {
 }
 
 sub _is_valid_page {
-    my ( $self, $query, $templates_dir, $valid_pages  ) = @_;
+    my ( $self, $query, $conf ) = @_;
+
+    my ( $ext, $templates_dir, $valid_pages )
+    = @$conf{ qw/zcms_template_extension templates valid_pages/ };
+
     unless ( ref $valid_pages eq 'HASH' ) {
         croak "Config file error: valid_pages must be a hashref";
     }
@@ -52,11 +59,11 @@ sub _is_valid_page {
         return 1
             if $_ eq $query->{dir} . $query->{page};
     }
-    
+
     for ( @{ $valid_pages->{dirs} || [] } ) {
         return 1
             if $_ eq $query->{dir}
-                and -e File::Spec->catfile( $templates_dir, $query->{dir}, $query->{page} . '.tmpl');
+                and -e File::Spec->catfile( $templates_dir, $query->{dir}, $query->{page} . $ext);
     }
     
     return 0;
@@ -173,7 +180,8 @@ See L<CONFIGURATION FILE EXAMPLES> section below.
                     current_dir => '/foos/',
                 },
             },
-        }
+        },
+        zcms_template_extension => '.tmpl',
     };
 
 ZofCMS config file is just a text file which contains a perl hashref. Note:
@@ -379,6 +387,13 @@ B<Note:> when specifying the "directory keys", make sure to have the leading
 and ending slash (or just one slash if it's a "root" directory),
 because that's what the C<dir> query parameter looks like after being
 processed.
+
+=head2 C<zcms_template_extension>
+
+    { zcms_template_extension => '.tmpl', }
+
+B<Optional>. The C<zcms_template_extension> key takes a string as an argument. This string
+represents the extensions for your ZofCMS Template files. B<Defaults to:> C<.tmpl>
 
 =head1 METHODS
 
