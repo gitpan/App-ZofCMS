@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0106';
+our $VERSION = '0.0107';
 
 
 1;
@@ -194,7 +194,7 @@ Open up your config file and under valid pages add '/foo'. Considering
 you *did* read documentation for L<App::ZofCMS::Config> you'll know exactly
 what to do at this point.
 
-now go to your "core dir" (which will be /var/www/templates/web_site/
+now go to your "core dir" (which will be /var/www/testsite/web_site/
 if you followed (and able to execute) the helper script example from
 INITIAL SETUP section above. Go to to directory "templates" and create
 a file named C<foo.tmpl>, in that file enter the following:

@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0107  November 6, 2008
+        Fixed discrepancy in documentation
+
 0.0106  October 25, 2008
         Added an option to configure ZofCMS Template file extensions
 
