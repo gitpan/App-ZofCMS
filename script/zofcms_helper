@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0103';
+our $VERSION = '0.0104';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -56,9 +56,10 @@ if ( $opts{cpan} ) {
 
 if ( $opts{plugins} ) {
     prepare_plugins( @opts{qw/core plugins/} );
-    exit
-        if $opts{nocore};
 }
+
+exit
+    if $opts{nocore};
 
 @opts{ qw/index base index_tmpl index_html_tmpl 404  config_file/ } = (
     File::Spec->catfile( $opts{site}, 'index.pl' ),
