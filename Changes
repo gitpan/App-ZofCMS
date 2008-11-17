@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0110  November 17, 2008
+        Fixed a stupid bug in --pages option for zofcms_helper
+
 0.0109  November 17, 2008
         Added --pages option to zofcms_helper
 

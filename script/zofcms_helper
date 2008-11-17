@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0105';
+our $VERSION = '0.0106';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -101,7 +101,7 @@ if ( $opts{pages} ) {
                 my $title = join ' - ', map ucfirst, reverse split '/', $page;
                 print $fh_template <<"END";
 {
-    body => \'$data',
+    body => \\'$data',
     title => '$title',
 }
 END
