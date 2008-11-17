@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0109  November 17, 2008
+        Added --pages option to zofcms_helper
+
 0.0108  November 6, 2008
         Fixed zofcms_helper to allow addition of modules without touching the core
 

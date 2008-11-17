@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0104';
+our $VERSION = '0.0105';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -18,6 +18,7 @@ my %opts = (
     plugins => '',
     nocore  => '',
     cpan    => '',
+    pages   => '',
 );
 
 GetOptions(
@@ -26,6 +27,7 @@ GetOptions(
     'plugins=s' => \ $opts{plugins},
     'nocore'    => \ $opts{nocore},
     'cpan=s'    => \ $opts{cpan},
+    'pages=s'   => \ $opts{pages},
 );
 
 $opts{core} = $opts{site} . '_site'
@@ -56,6 +58,57 @@ if ( $opts{cpan} ) {
 
 if ( $opts{plugins} ) {
     prepare_plugins( @opts{qw/core plugins/} );
+}
+
+if ( $opts{pages} ) {
+    for my $page ( split /,/, $opts{pages} ) {
+        my @dirs = split '/', $page;
+        if ( @dirs > 1 ) {
+            mkpath( [
+                    File::Spec->catdir( $opts{core}, 'data', @dirs[0 .. $#dirs - 1] )
+                ], 1, 0777
+            );
+            mkpath( [
+                    File::Spec->catdir( $opts{core}, 'templates', @dirs[0 .. $#dirs - 1] )
+                ], 1, 0777
+            );
+        }
+        $dirs[-1] .= '.tmpl';
+        my $data = File::Spec->catfile( $opts{core}, 'data', @dirs );
+        my $template = File::Spec->catfile( $opts{core}, 'templates', @dirs );
+        if ( -e $data ) {
+            print "$data file exists, omitting...\n";
+        }
+        else {
+            my $fh_data;
+            unless ( open $fh_data, '>', $data ) {
+                warn "Failed to open $data [$!]\n";
+            }
+            else {
+                close $fh_data;
+            }
+        }
+
+        if ( -e $template ) {
+            print "$template file exists, omitting...\n";
+        }
+        else {
+            my $fh_template;
+            unless ( open $fh_template, '>', $template ) {
+                warn "Failed to open $template [$!]\n";
+            }
+            else {
+                my $title = join ' - ', map ucfirst, reverse split '/', $page;
+                print $fh_template <<"END";
+{
+    body => \'$data',
+    title => '$title',
+}
+END
+                close $fh_template;
+            }
+        }
+    }
 }
 
 exit
@@ -361,6 +414,16 @@ the module you've specified.
 The C<--nocore> option tells the helper script not to create any "core"
 directories or files, the command above will only install C<DBI> and
 C<QueryToTemplate> plugins into the "core" directory.
+
+=head2 C<--pages>
+
+    zofcms_helper --nocore --site zcms --pages foo,foo/bar,foo/bar/baz
+
+The C<--pages> argument tells C<zofcms_helper> to create "page templates". The value to
+C<--pages> argument is a comma separated list of pages you wish to create. With this argument
+the script will try to be smart and create an empty file in C<data> directory as well as
+a ZofCMS Template file in C<templates> directory. Just run the script with the example above
+and check out your data and templates dirs to see the result.
 
 =head1 AUTHOR
 

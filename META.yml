@@ -1,6 +1,6 @@
 ---
 name: App-ZofCMS
-version: 0.0108
+version: 0.0109
 author:
   - 'Zoffix Znet <zoffix@cpan.org>'
 abstract: web framework and templating system for small-medium sites.
@@ -21,7 +21,7 @@ build_requires:
 provides:
   App::ZofCMS:
     file: lib/App/ZofCMS.pm
-    version: 0.0108
+    version: 0.0109
   App::ZofCMS::Config:
     file: lib/App/ZofCMS/Config.pm
     version: 0.0103
