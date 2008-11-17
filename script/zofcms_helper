@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0106';
+our $VERSION = '0.0107';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -98,10 +98,11 @@ if ( $opts{pages} ) {
                 warn "Failed to open $template [$!]\n";
             }
             else {
+                my $body_file = File::Spec->catfile( @dirs );
                 my $title = join ' - ', map ucfirst, reverse split '/', $page;
                 print $fh_template <<"END";
 {
-    body => \\'$data',
+    body => \\'$body_file',
     title => '$title',
 }
 END

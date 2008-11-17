@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0110';
+our $VERSION = '0.0111';
 
 
 1;
