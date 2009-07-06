@@ -3,22 +3,27 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0107';
+our $VERSION = '0.0108';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
 use File::Copy;
+use File::Find;
+use Cwd;
 
 require File::Spec;
 
+my %Show_Plugins;
+
 
 my %opts = (
-    site    => 'zcms',
-    core    => '',
-    plugins => '',
-    nocore  => '',
-    cpan    => '',
-    pages   => '',
+    site         => 'zcms',
+    core         => '',
+    plugins      => '',
+    nocore       => '',
+    cpan         => '',
+    pages        => '',
+    show_plugins => '',
 );
 
 GetOptions(
@@ -26,6 +31,7 @@ GetOptions(
     'core=s'    => \ $opts{core},
     'plugins=s' => \ $opts{plugins},
     'nocore'    => \ $opts{nocore},
+    'show_plugins'    => \ $opts{show_plugins},
     'cpan=s'    => \ $opts{cpan},
     'pages=s'   => \ $opts{pages},
 );
@@ -54,6 +60,11 @@ mkpath(
 
 if ( $opts{cpan} ) {
     prepare_cpan( @opts{ qw/core cpan/} );
+}
+
+if ( $opts{show_plugins} ) {
+    show_plugins( @opts{qw/core site/} );
+    exit;
 }
 
 if ( $opts{plugins} ) {
@@ -167,6 +178,75 @@ copy_module( $_, $opts{core} )
         App::ZofCMS::Output
     /;
 
+sub show_plugins {
+    my ( $core, $site ) = @_;
+
+    find(\&show_plugins_plugin_found, File::Spec->catdir($core, 'templates') );
+
+    if ( my $t = do File::Spec->catfile( $core, 'config.txt' ) ) {
+        for my $key ( grep /^plugins\d*/, keys %$t ) {
+            ref $t->{$key} eq 'ARRAY'
+                or next;
+
+            for ( @{ $t->{$key} || [] } ) {
+                if ( ref $_ eq 'HASH' ) {
+                    $Show_Plugins{ (keys %$_)[0] } = 1;
+                    next;
+                }
+                $Show_Plugins{ $_ } = 1;
+            }
+        }
+
+        for my $key ( grep /^plugins\d*/, keys %{ $t->{template_defaults} } ) {
+            ref $t->{template_defaults}{$key} eq 'ARRAY'
+                or next;
+
+            for ( @{ $t->{template_defaults}{$key} || [] } ) {
+                if ( ref $_ eq 'HASH' ) {
+                    $Show_Plugins{ (keys %$_)[0] } = 1;
+                    next;
+                }
+                $Show_Plugins{ $_ } = 1;
+            }
+        }
+    }
+
+    print "The following plugins were found:\n";
+    print "$_\n" for map "App::ZofCMS::Plugin::$_", sort keys %Show_Plugins;
+    print "--end--\n";
+    print "zofcms_helper --nocore --site $site --plugins "
+        . join(q|,|, sort keys %Show_Plugins) . "\n";
+    exit;
+}
+
+sub show_plugins_plugin_found {
+
+    return
+        if -d;
+
+    print "About to process template: $File::Find::name\n";
+
+    my $t = do $_
+        or return;
+
+    ref $t eq 'HASH'
+        or return;
+
+    for my $key ( grep /^plugins\d*/, keys %$t ) {
+        ref $t->{$key} eq 'ARRAY'
+            or return;
+
+        for ( @{ $t->{$key} || [] } ) {
+            if ( ref $_ eq 'HASH' ) {
+                $Show_Plugins{ (keys %$_)[0] } = 1;
+                next;
+            }
+            $Show_Plugins{ $_ } = 1;
+        }
+    }
+}
+
+
 sub prepare_plugins {
     my ( $core, $plugins ) = @_;
     my @plugins = map "App::ZofCMS::Plugin::$_", split ',', $plugins;
@@ -202,6 +282,11 @@ sub copy_module {
     my $mod_file = $mod . '.pm';
     $mod_file =~ s|::|/|g;
 
+    my $mod_path = $mod_file;
+    $mod_path =~ s|[^\\/]+$||;
+
+    mkpath( [ File::Spec->catdir( $core, $mod_path ) ], 1, 0777 );
+
     my $core_mod_file = File::Spec->catfile( $core, $mod_file );
 
     copy $INC{$mod_file}, $core_mod_file
@@ -219,8 +304,7 @@ sub make_index_pl {
 use strict;
 use warnings;
 
-use lib '[{LIB}]';
-use lib '[{LIB}]/CPAN';
+use lib qw([{LIB}] [{LIB}]/CPAN);
 use App::ZofCMS::Config;
 use App::ZofCMS::Template;
 use App::ZofCMS::Output;
@@ -260,8 +344,14 @@ sub make_base {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 <title><tmpl_var name="title"></title>
+
+<link rel="stylesheet" type="text/css" href="/main.css" media="screen,tv,projection">
+<link rel="stylesheet" type="text/css" href="/print.css" media="print">
+
+<!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="/ie.css" media="screen,tv,projection">
+<![endif]-->
 
 <div id="main">
     <tmpl_var name="body">
@@ -271,6 +361,9 @@ END_HTML
 
 sub make_index_tmpl {
     return <<'END_CODE';
+use strict;
+use warnings;
+
 {
     body => \'index.tmpl',
     title => '',
@@ -285,7 +378,7 @@ sub make_index_html_tmpl {
 sub make_404 {
     return <<'END_CODE';
 {
-    body => q|<p>The page you've tried to access does not exist or was moved</p>|,
+    body => \'404.tmpl',
     title => '404 - Page Not Found',
 }
 END_CODE
@@ -294,6 +387,9 @@ END_CODE
 sub make_config_file {
     my $core_dir = shift;
     return <<"END_CONFIG";
+use strict;
+use warnings;
+
 {
     valid_pages => {
         dirs => [
@@ -425,6 +521,14 @@ C<--pages> argument is a comma separated list of pages you wish to create. With 
 the script will try to be smart and create an empty file in C<data> directory as well as
 a ZofCMS Template file in C<templates> directory. Just run the script with the example above
 and check out your data and templates dirs to see the result.
+
+=head2 C<--show_plugins>
+
+    zofcms_helper --nocore --site zcms --show_plugins
+
+Takes no arguments, when present, zofcms_helper will show a list of all the plugins
+used by the site (note that plugins listed in Main Config File under C<dir_defaults> key
+are currently not shown by this function).
 
 =head1 AUTHOR
 

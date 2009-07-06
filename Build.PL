@@ -18,6 +18,7 @@ my $builder = Module::Build->new(
         'HTML::Template' => 2.9,
         'Getopt::Long'   => 2.35,
         'File::Path'     => 1.08,
+        'File::Find'     => 1.12,
         'File::Copy'     => 2.09,
     },
     add_to_cleanup      => [ 'App-ZofCMS-*' ],

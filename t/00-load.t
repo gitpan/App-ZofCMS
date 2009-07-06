@@ -1,12 +1,13 @@
 #!/usr/bin/env perl
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 BEGIN {
     use_ok('Carp');
     use_ok('CGI');
     use_ok('CGI::Carp');
     use_ok('File::Spec');
+    use_ok('File::Find');
     use_ok('HTML::Template');
     use_ok('Getopt::Long');
     use_ok('File::Path');

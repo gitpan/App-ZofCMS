@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0104';
+our $VERSION = '0.0105';
 
 use HTML::Template;
 
@@ -48,9 +48,9 @@ sub prepare_defaults {
     my $conf = $self->conf;
     my $query = $self->query;
 
-    my $dir_defaults = $conf->{dir_defaults}{ $query->{dir} };
+    my $dir_defaults = $conf->{dir_defaults}{ $query->{dir} } || {};
     
-    %$template = ( %{ $dir_defaults || {} }, %$template );
+    %$template = ( %$dir_defaults, %$template );
     %$template = ( %{ $conf->{template_defaults} || {} }, %$template );
 
     %{ $template->{conf} } = (
@@ -71,12 +71,25 @@ sub prepare_defaults {
         %{ $template->{d} || {} },
     );
 
-    $template->{plugins}  = $self->sort_plugins(
-        ( $conf->{template_defaults}{plugins} || [] ),
-        ( $dir_defaults->{plugins} || [] ),
-        ( $template->{plugins} || [] ),
-    );
+    my @plug_keys = map /(\d+)/, grep /^plugins\d+$/,
+        keys %$template,
+        keys %{ $conf->{template_defaults} || {} },
+        keys %$dir_defaults;
 
+    my %unique_plug_keys;
+    @unique_plug_keys{ @plug_keys } = ();
+    @plug_keys = sort { $a <=> $b } keys %unique_plug_keys;
+    
+    unshift @plug_keys, ''; # add this for 'plugins' key that doesn't have a number
+    $self->unique_plug_keys( \@plug_keys );
+    
+    for ( @plug_keys ) {
+        $template->{ "plugins$_" }  = $self->sort_plugins(
+            ( $conf->{template_defaults}{ "plugins$_" } || [] ),
+            ( $dir_defaults->{ "plugins$_" } || [] ),
+            ( $template->{ "plugins$_" } || [] ),
+        );
+    }
 }
 
 sub assemble {
@@ -187,14 +200,13 @@ sub _exec_plugins {
     my $query    = $self->query;
     my $config   = $self->config;
 
-    my @plugins = @{ $template->{plugins} || [] };
-
-    for ( @plugins ) {
-        my $plugin = "App::ZofCMS::Plugin::$_";
-        eval "use $plugin";
-        $@ and croak "Failed to use() plugin $plugin: $@";
-
-        $plugin->new->process( $template, $query, $config );
+    for my $plug_key ( @{ $self->unique_plug_keys } ) {
+        for ( @{ $template->{ "plugins$plug_key" } || [] } ) {
+            my $plugin = "App::ZofCMS::Plugin::$_";
+            eval "use $plugin";
+            $@ and croak "Failed to use() plugin $plugin: $@";
+            $plugin->new->process( $template, $query, $config );
+        }
     }
 
     return;
@@ -287,6 +299,14 @@ sub conf {
     return $self->{ conf };
 }
 
+
+sub unique_plug_keys {
+    my $self = shift;
+    if ( @_ ) {
+        $self->{UNIQUE_PLUG_KEYS} = shift;
+    }
+    return $self->{UNIQUE_PLUG_KEYS};
+}
 
 1;
 __END__
@@ -409,9 +429,15 @@ hashref).
             { TOC => 100 }, # this one has specific priority of 100
             { Plugin => 1000 }, # this one got priority of 1000
         ],
+        plugins2 => [ # this is a second level of plugins, allows to run same plugins twice
+            qw/Foo Bar Baz/
+        ],
     }
 
-Special key C<plugins> takes an B<arrayref> as a value. Elements of this
+Special key C<plugins> takes an B<arrayref> as a value. Can be postfixed by a number to
+create several levels of plugin sets to run (allows to execute same plugins several times).
+The higher the number the later that plugin set will execute.
+Elements of this
 arrayref can be either scalars or hashrefs. If the element is a scalar
 it will be treated as the name of the plugin to load/execute; in this
 case the "priority" of the plugin is set to 10000. If the element is a

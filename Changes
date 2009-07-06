@@ -1,5 +1,10 @@
 Revision history for App-ZofCMS
 
+0.0211  July 5, 2009
+        Fixed bugs in --plugins in zofcms_helper and edited the contents of some files it generates
+        Added multi-level plugins
+        Added --show_plugins in zofcms_helper
+
 0.0111  November 17, 2008
         Fixed a stupid bug in --pages option for zofcms_helper (again)
 
