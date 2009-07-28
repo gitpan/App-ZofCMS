@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0221  July 27, 2009
+        Made "Content-type" header to include utf-8 encoding
+
 0.0211  July 5, 2009
         Fixed bugs in --plugins in zofcms_helper and edited the contents of some files it generates
         Added multi-level plugins

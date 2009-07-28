@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '0.0101';
+our $VERSION = '0.0221';
 
 sub new {
     my ( $class, $config, $template ) = @_;
@@ -22,7 +22,7 @@ sub headers {
     if ( $query->{dir} eq '/' and $query->{page} eq '404' ) {
          return $self->config->cgi->header('text/html','404 Not Found');
     }
-    return $self->config->cgi->header;
+    return $self->config->cgi->header( -type => 'text/html', -charset => 'utf-8' );
 }
 
 sub output {
