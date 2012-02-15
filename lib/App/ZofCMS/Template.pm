@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0221';
+our $VERSION = '0.0222';
 
 use HTML::Template;
 

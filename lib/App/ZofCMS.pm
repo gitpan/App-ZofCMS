@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0221';
+our $VERSION = '0.0222';
 
 
 1;
@@ -128,7 +128,7 @@ At the time of this writing that webpage is not yet up.
 
 First of all, install C<App::ZofCMS> "module" via your cpan script. If you
 don't know how to do that, read
-L<http://sial.org/howto/perl/life-with-cpan/>. This will install ZofCMS
+L<http://novosial.org/perl/life-with-cpan/index.html>. This will install ZofCMS
 "core" along with with helper script. Detailed description of helper
 script can be found by running C<perldoc zofcms_helper>.
 

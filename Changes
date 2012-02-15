@@ -1,5 +1,8 @@
 Revision history for App-ZofCMS
 
+0.0222  Feb 14, 2012
+        Fixed sial.org link
+
 0.0221  July 27, 2009
         Made "Content-type" header to include utf-8 encoding
 

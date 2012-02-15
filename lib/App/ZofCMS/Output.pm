@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '0.0221';
+our $VERSION = '0.0222';
 
 sub new {
     my ( $class, $config, $template ) = @_;

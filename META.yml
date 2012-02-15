@@ -1,14 +1,30 @@
 ---
-name: App-ZofCMS
-version: 0.0221
+abstract: 'web framework and templating system for small-medium sites.'
 author:
   - 'Zoffix Znet <zoffix@cpan.org>'
-abstract: web framework and templating system for small-medium sites.
-license: perl
-resources:
-  license: http://dev.perl.org/licenses/
 build_requires:
   Test::More: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: App-ZofCMS
+provides:
+  App::ZofCMS:
+    file: lib/App/ZofCMS.pm
+    version: 0.0222
+  App::ZofCMS::Config:
+    file: lib/App/ZofCMS/Config.pm
+    version: 0.0221
+  App::ZofCMS::Output:
+    file: lib/App/ZofCMS/Output.pm
+    version: 0.0222
+  App::ZofCMS::Template:
+    file: lib/App/ZofCMS/Template.pm
+    version: 0.0222
 requires:
   CGI: 3.15
   CGI::Carp: 1.29
@@ -19,22 +35,6 @@ requires:
   File::Spec: 3.2701
   Getopt::Long: 2.35
   HTML::Template: 2.9
-configure_requires:
-  Module::Build: 0.34
-provides:
-  App::ZofCMS:
-    file: lib/App/ZofCMS.pm
-    version: 0.0221
-  App::ZofCMS::Config:
-    file: lib/App/ZofCMS/Config.pm
-    version: 0.0221
-  App::ZofCMS::Output:
-    file: lib/App/ZofCMS/Output.pm
-    version: 0.0221
-  App::ZofCMS::Template:
-    file: lib/App/ZofCMS/Template.pm
-    version: 0.0221
-generated_by: Module::Build version 0.34
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.0222
