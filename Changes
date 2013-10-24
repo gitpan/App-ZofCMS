@@ -1,5 +1,15 @@
 Revision history for App-ZofCMS
 
+0.0223  Oct 22, 2013
+	1) Fixed inconsistent versions (for CPANTS Game)
+	2) Made zofcms_helper NOT overwrite existing plugin files, when --plugins option is used.
+	   The new option --overwrite_existing_plugins=1 can be used to elicit plugin overwrite
+	3) Added use strict/warnings and plugins => [] to the default file made by --pages option in
+	   the zofcms_helper.
+	4) Removed use_ok('Carp') test as it was throwing warnings. Carp is core anyway, so the test is
+	   somewhat useless.
+	
+
 0.0222  Feb 14, 2012
         Fixed sial.org link
 

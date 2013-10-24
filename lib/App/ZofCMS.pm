@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0222';
+our $VERSION = '0.0223';
 
 
 1;
@@ -55,7 +55,7 @@ I use (I didn't use any at the time) and I would gladly say "I use ZofCMS"
 instead of the expected "Drupal" or "Wordpress".
 
 After coding a templating system from scratch for
-L<http://getflusmart.com/>, which runs on the server without any SQL, ssh
+one of the sites, which runs on the server without any SQL, ssh
 or ability to install any perl modules directly from CPAN, I already felt
 that something needed to be done. The "perl hashref" templates which I used
 to make all those products displayed with only one L<HTML::Template>

@@ -3,9 +3,9 @@
 use Test::More tests => 14;
 
 BEGIN {
-    use_ok('Carp');
+    require_ok('Carp');
     use_ok('CGI');
-    use_ok('CGI::Carp');
+    require_ok('CGI::Carp');
     use_ok('File::Spec');
     use_ok('File::Find');
     use_ok('HTML::Template');

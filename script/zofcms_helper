@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.0109';
+our $VERSION = '0.0223';
 use lib '../lib';
 use Getopt::Long;
 use File::Path;
@@ -34,6 +34,7 @@ GetOptions(
     'show_plugins'    => \ $opts{show_plugins},
     'cpan=s'    => \ $opts{cpan},
     'pages=s'   => \ $opts{pages},
+    'overwrite_existing_plugins' => \ $opts{overwrite_existing_plugins},
 );
 
 $opts{core} = $opts{site} . '_site'
@@ -63,12 +64,12 @@ if ( $opts{cpan} ) {
 }
 
 if ( $opts{show_plugins} ) {
-    show_plugins( @opts{qw/core site/} );
+    show_plugins( @opts{qw/core  site/} );
     exit;
 }
 
 if ( $opts{plugins} ) {
-    prepare_plugins( @opts{qw/core plugins/} );
+    prepare_plugins( @opts{qw/core plugins  overwrite_existing_plugins/} );
 }
 
 if ( $opts{pages} ) {
@@ -112,10 +113,18 @@ if ( $opts{pages} ) {
                 my $body_file = File::Spec->catfile( @dirs );
                 my $title = join ' - ', map ucfirst, reverse split '/', $page;
                 print $fh_template <<"END";
+use strict;
+use warnings;
+
 {
     body => \\'$body_file',
     title => '$title',
-}
+    plugins => [
+    ],
+};
+
+1;
+__END__
 END
                 close $fh_template;
             }
@@ -248,10 +257,10 @@ sub show_plugins_plugin_found {
 
 
 sub prepare_plugins {
-    my ( $core, $plugins ) = @_;
-    my @plugins = map "App::ZofCMS::Plugin::$_", split ',', $plugins;
+    my ( $core, $plugins, $do_overwrite ) = @_;
+    my @plugins = map "App::ZofCMS::Plugin::$_", split /\s*,\s*/, $plugins;
 
-    copy_module( $_, $core)
+    copy_module( $_, $core, $do_overwrite )
         for @plugins;
 }
 
@@ -272,7 +281,7 @@ sub prepare_cpan {
 }
 
 sub copy_module {
-    my ( $mod, $core ) = @_;
+    my ( $mod, $core, $do_overwrite ) = @_;
     eval "use $mod;";
     if ( $@ ) {
         print "ERROR: $@\n";
@@ -289,8 +298,13 @@ sub copy_module {
 
     my $core_mod_file = File::Spec->catfile( $core, $mod_file );
 
-    copy $INC{$mod_file}, $core_mod_file
-        or print "ERROR: failed to copy $mod [$!]";
+    if ( -e $core_mod_file and not $do_overwrite ) {
+        print "$core_mod_file already exists. Use `--overwrite_existing_plugins` option to overwrite\n";
+    }
+    else {
+        copy $INC{$mod_file}, $core_mod_file
+            or print "ERROR: failed to copy $mod [$!]";
+    }
 }
 
 sub make_index_pl {
@@ -489,6 +503,13 @@ C<App::ZofCMS::Plugin::OtherPlugin> modules into the "core" directory.
 B<Note:> the command presented above will recreate the "core" files and
 C<index.pl> file. To avoid that, i.e. just add the plugins, use the
 <--nocore> option
+
+=head2 C<--overwrite_existing_plugins>
+
+    zofcms_helper --site zcms --plugins DBI,QueryToTemplate,OtherPlugin --overwrite_existing_plugins
+
+The C<--plugins> option above will NOT overwrite any existing files by default. To force overwriting,
+use the C<--overwrite_existing_plugins> option.
 
 =head2 C<--cpan>
 

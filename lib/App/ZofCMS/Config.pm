@@ -3,7 +3,7 @@ package App::ZofCMS::Config;
 use warnings;
 use strict;
 
-our $VERSION = '0.0221';
+our $VERSION = '0.0223';
 
 use CGI qw/:standard Vars/;
 use Carp;

@@ -21,6 +21,7 @@ my $builder = Module::Build->new(
         'File::Find'     => 1.12,
         'File::Copy'     => 2.09,
     },
+    configure_requires => { 'Module::Build' => 0.40 },
     add_to_cleanup      => [ 'App-ZofCMS-*' ],
     create_makefile_pl => 'traditional',
     script_files => [ 'script/zofcms_helper' ],
