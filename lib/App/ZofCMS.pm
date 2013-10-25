@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0223';
+our $VERSION = '0.0224';
 
 
 1;
@@ -217,14 +217,10 @@ touch C<base.tmpl> file in your "data directory" you can now access
 your web application and see a page which will display current time.
 How wonderful \o/
 
+=head1 BUG REPORTS AND CONTRIBUTIONS BY
 
-=head2 MORE INFORMATION
-
-If you are still stuggling and don't know what to do after reading all
-the documentation from start to end. E-mail the me and I will include
-more examples and explanations for ZofCMS. When I will have enough time
-I will also put up a little FAQ on L<http://web-tools.cc/tools/ZofCMS/>,
-which at the time of this writing is nothing but an idea.
+B<Neil 'NEILB' Bowers> -- Patch to the I<Changes> file to ensure
+compliance with L<CPAN::Changes::Spec>
 
 =head1 AUTHOR
 

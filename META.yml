@@ -16,16 +16,16 @@ name: App-ZofCMS
 provides:
   App::ZofCMS:
     file: lib/App/ZofCMS.pm
-    version: 0.0223
+    version: 0.0224
   App::ZofCMS::Config:
     file: lib/App/ZofCMS/Config.pm
-    version: 0.0223
+    version: 0.0224
   App::ZofCMS::Output:
     file: lib/App/ZofCMS/Output.pm
-    version: 0.0223
+    version: 0.0224
   App::ZofCMS::Template:
     file: lib/App/ZofCMS/Template.pm
-    version: 0.0223
+    version: 0.0224
 requires:
   CGI: 3.15
   CGI::Carp: 1.29
@@ -38,4 +38,4 @@ requires:
   HTML::Template: 2.9
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.0223
+version: 0.0224

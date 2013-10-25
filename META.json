@@ -41,19 +41,19 @@
    "provides" : {
       "App::ZofCMS" : {
          "file" : "lib/App/ZofCMS.pm",
-         "version" : "0.0223"
+         "version" : "0.0224"
       },
       "App::ZofCMS::Config" : {
          "file" : "lib/App/ZofCMS/Config.pm",
-         "version" : "0.0223"
+         "version" : "0.0224"
       },
       "App::ZofCMS::Output" : {
          "file" : "lib/App/ZofCMS/Output.pm",
-         "version" : "0.0223"
+         "version" : "0.0224"
       },
       "App::ZofCMS::Template" : {
          "file" : "lib/App/ZofCMS/Template.pm",
-         "version" : "0.0223"
+         "version" : "0.0224"
       }
    },
    "release_status" : "stable",
@@ -62,5 +62,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.0223"
+   "version" : "0.0224"
 }
