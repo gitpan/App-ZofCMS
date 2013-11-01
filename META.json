@@ -21,7 +21,7 @@
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.4"
+            "Module::Build" : "0"
          }
       },
       "runtime" : {
@@ -34,26 +34,27 @@
             "File::Path" : "1.08",
             "File::Spec" : "3.2701",
             "Getopt::Long" : "2.35",
-            "HTML::Template" : "2.9"
+            "HTML::Template" : "2.9",
+            "perl" : "5.006"
          }
       }
    },
    "provides" : {
       "App::ZofCMS" : {
          "file" : "lib/App/ZofCMS.pm",
-         "version" : "0.0224"
+         "version" : "0.0225"
       },
       "App::ZofCMS::Config" : {
          "file" : "lib/App/ZofCMS/Config.pm",
-         "version" : "0.0224"
+         "version" : "0.0225"
       },
       "App::ZofCMS::Output" : {
          "file" : "lib/App/ZofCMS/Output.pm",
-         "version" : "0.0224"
+         "version" : "0.0225"
       },
       "App::ZofCMS::Template" : {
          "file" : "lib/App/ZofCMS/Template.pm",
-         "version" : "0.0224"
+         "version" : "0.0225"
       }
    },
    "release_status" : "stable",
@@ -62,5 +63,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.0224"
+   "version" : "0.0225"
 }

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Carp;
 
-our $VERSION = '0.0224';
+our $VERSION = '0.0225';
 
 sub new {
     my ( $class, $config, $template ) = @_;
@@ -61,7 +61,7 @@ sub template {
 1;
 __END__
 
-
+=encoding utf8
 
 =head1 NAME
 

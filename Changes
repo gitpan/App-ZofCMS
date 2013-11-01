@@ -1,5 +1,8 @@
 Revision history for Perl module App::ZofCMS
 
+0.0225  2013-11-01
+    - Minor fixes to comply with Kwalitee game
+
 0.0224  2013-10-24
     - Applied fixes submitted by Neil 'NEILB' Bowers to convert
       "Changes" file to be compliant with the CPAN::Changes::Spec

@@ -3,11 +3,13 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '0.0224';
+our $VERSION = '0.0225';
 
 
 1;
 __END__
+
+=encoding utf8
 
 =head1 NAME
 

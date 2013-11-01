@@ -4,7 +4,7 @@ package App::ZofCMS::Template;
 use strict;
 use warnings;
 
-our $VERSION = '0.0224';
+our $VERSION = '0.0225';
 
 use HTML::Template;
 
@@ -311,6 +311,7 @@ sub unique_plug_keys {
 1;
 __END__
 
+=encoding utf8
 
 =head1 NAME
 
