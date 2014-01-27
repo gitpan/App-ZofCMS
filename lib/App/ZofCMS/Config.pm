@@ -3,7 +3,7 @@ package App::ZofCMS::Config;
 use warnings;
 use strict;
 
-our $VERSION = '0.0225';
+our $VERSION = '1.001001'; # VERSION
 
 use CGI qw/:standard Vars/;
 use Carp;
@@ -13,17 +13,17 @@ require File::Spec;
 sub new {
     my $class = shift;
     my $self = bless {}, $class;
-    
+
     $self->cgi( CGI->new );
     $self->query( $self->_prepare_query );
-    
+
     return $self;
 }
 
 sub load {
     my ( $self, $conf_file, $no_page_check ) = @_;
 
-        
+
     my $conf = do $conf_file
         or croak "Failed to load config file ($!) ($@)";
 
@@ -36,12 +36,12 @@ sub load {
             $query,
             $conf,
         );
-        
+
         unless ( $is_valid_page ) {
             @$query{ qw/page dir/ } = qw|404 /|;
         }
     }
-        
+
     return $self->conf( $conf );
 }
 
@@ -54,7 +54,7 @@ sub _is_valid_page {
     unless ( ref $valid_pages eq 'HASH' ) {
         croak "Config file error: valid_pages must be a hashref";
     }
-    
+
     for ( @{ $valid_pages->{pages} || [] } ) {
         return 1
             if $_ eq $query->{dir} . $query->{page};
@@ -65,13 +65,13 @@ sub _is_valid_page {
             if $_ eq $query->{dir}
                 and -e File::Spec->catfile( $templates_dir, $query->{dir}, $query->{page} . $ext);
     }
-    
+
     return 0;
 }
 
 sub _prepare_query {
     my $self = shift;
-    
+
     my %query = Vars();
 
     unless ( defined $query{page} and length $query{page} ) {
@@ -91,7 +91,7 @@ sub _prepare_query {
     }
 
     $query{dir} =~ s/\Q..//g;
-    
+
     $query{dir} = "/$query{dir}"
         unless substr($query{dir}, 0, 1) eq '/';
 
@@ -134,16 +134,18 @@ __END__
 
 =encoding utf8
 
+=for stopwords  dir perlish recurseable standalone
+
 =head1 NAME
 
 App::ZofCMS::Config - "core" part of ZofCMS - web-framework/templating system
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
 This module is part of "core" of ZofCMS web-framework/templating system.
 Please read L<App::ZofCMS> if you haven't done so already. The module is
-not to be used as a standalone module, thus no synopsys is provided.
-See L<CONFIGURATION FILE EXAMPLES> section below.
+not to be used as a standalone module, thus no synopsis is provided.
+See C<CONFIGURATION FILE EXAMPLES> section below.
 
 =head1 ZofCMS CONFIGURATION FILE
 
@@ -216,7 +218,8 @@ have meaning for ZofCMS core:
 
 The C<data_store> key specifies the directory (relative you C<index.pl>)
 with your "data", i.e. the L<HTML::Template> files which you can reference
-from ZofCMS templates. More on this in L<App::ZofCMS::Template> documentaion
+from ZofCMS templates. More on this in L<App::ZofCMS::Template>
+documentation
 
 =head2 C<templates>
 
@@ -226,8 +229,8 @@ from ZofCMS templates. More on this in L<App::ZofCMS::Template> documentaion
 
 Alike C<data_store>, C<templates> key points to the directory where you
 keep your ZofCMS template files which are explained in
-L<App::ZofCMS::Template> documentaion. B<Note:> the value of this key is
-refered to as "templates dir" in the documentation below.
+L<App::ZofCMS::Template> documentation. B<Note:> the value of this key is
+referred to as "templates dir" in the documentation below.
 
 =head2 C<valid_pages>
 
@@ -268,7 +271,7 @@ C<index.pl?page=bar&dir=/foo/> by App::ZofCMS::Config module, note how
 the leading and ending slash was appended to the C<dir> automatically.
 
 B<Note:> personally I use Apache's C<mod_rewrite> to "fix" the query,
-in other words, the example above the URI can look like 
+in other words, the example above the URI can look like
 C<http://example.com/foo/bar>
 
 =head3 C<pages>
@@ -316,10 +319,10 @@ C<< dirs => [ '/tools/' ] >> for C<valid_pages>. On top of all that,
 you have created a file C<../zcms_site/templates/tools/stuff.tmpl> which
 is the only file in that directory.
 If user would go to C<http://example.com/index.pl?page=tools/stuff>,
-ZofCMS would interpet C<../zcms_site/templates/tools/stuff.tmpl> template
+ZofCMS would interpret C<../zcms_site/templates/tools/stuff.tmpl> template
 and display a page, any other pages would give him a 404.
 
-B<Note:> directories specified in C<dirs> arrayref are not recursable, i.e.
+B<Note:> directories specified in C<dirs> arrayref are not recurseable, i.e.
 specifying C<< dirs => [ '/' ] >>  enable pages in '/tools/'. Later, a
 special flag to indicate recursing may be implemented.
 
@@ -342,12 +345,12 @@ special flag to indicate recursing may be implemented.
     }
 
 These are the "defaults" for all of ZofCMS templates of your ZofCMS site.
-In other words (refering to the example above) if you don't set key C<foo>
+In other words (referring to the example above) if you don't set key C<foo>
 in any of your ZofCMS templates, it will take on its default value C<bar>.
 
 The exception are special keys (which are described in
 L<App::ZofCMS::Template>): C<t>, C<d>, C<conf> and C<plugins>, their
-B<contents> will act as defaults. In other words, (again refering to the
+B<contents> will act as defaults. In other words, (again referring to the
 sample above) if you set C<< t => { foo => 'bar' } >> in your ZofCMS
 template, the result will be as if you have set
 C<< t => { foo => 'bar', top => 'blah' } >>. Same applies for special keys
@@ -377,11 +380,11 @@ used.
 
 The C<dir_defaults> key functions exactly the same as C<template_defaults>
 (see above) with one exception, it's directory-specific. Once again, it
-takes a hashref as a value, the keys of that hashref are dirrectories for
+takes a hashref as a value, the keys of that hashref are directories for
 which you want to apply the defaults specified as values, which are hashrefs
 identical to C<template_defaults>.
 
-By "directory" is ment the C<dir> query parameter that is calculated
+By "directory" is meant the C<dir> query parameter that is calculated
 as is described in section B<Note on page and dir query parameters>
 above.
 
@@ -435,52 +438,29 @@ Returns the hashref of your main config file. Takes one optional argument
 which is a hashref, it will be appear as if it was loaded from your
 main config file -- bad idea to set it like this, in my opinion.
 
-=head1 AUTHOR
+=head1 REPOSITORY
 
-Zoffix Znet, C<< <zoffix at cpan.org> >>
-(L<http://zoffix.com>, L<http://haslayout.net>)
+Fork this module on GitHub:
+L<https://github.com/zoffixznet/App-ZofCMS>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-app-zofcms at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-ZofCMS>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+To report bugs or request features, please use
+L<https://github.com/zoffixznet/App-ZofCMS/issues>
 
-=head1 SUPPORT
+If you can't access GitHub, you can email your request
+to C<bug-App-ZofCMS at rt.cpan.org>
 
-You can find documentation for this module with the perldoc command.
+=head1 AUTHOR
 
-    perldoc App::ZofCMS
+Zoffix Znet <zoffix at cpan.org>
+(L<http://zoffix.com/>, L<http://haslayout.net/>)
 
-You can also look for information at:
+=head1 LICENSE
 
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-ZofCMS>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/App-ZofCMS>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/App-ZofCMS>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/App-ZofCMS>
-
-=back
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2008 Zoffix Znet, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
+You can use and distribute this module under the same terms as Perl itself.
+See the C<LICENSE> file included in this distribution for complete
+details.
 
 =cut
 

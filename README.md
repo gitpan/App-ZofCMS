@@ -1,71 +1,56 @@
-package App::ZofCMS;
-
-use warnings;
-use strict;
-
-our $VERSION = '1.001001'; # VERSION
-
-
-1;
-__END__
-
-=for stopwords Drupal Wordpress codebase  ssh  dir  foo webpage
-
-=encoding utf8
-
-=head1 NAME
+# NAME
 
 App::ZofCMS - web framework and templating system for small-medium sites.
 
-=head1 SYNOPSIS
+# SYNOPSIS
 
 This module is just the main documentation for ZofCMS framework. See
-L<USING THE FRAMEWORK> section below for explanation of how to use this
+["USING THE FRAMEWORK"](#using-the-framework) section below for explanation of how to use this
 framework.
 
-=head1 WARNING!!!
+# WARNING!!!
 
-Do B<NOT> use this framework for production code.
+Do __NOT__ use this framework for production code.
 At worst, this framework will be no longer maintained; at best, it will
 be significantly rewritten, breaking the API. It exists in the current
 state only to support the existing codebase.
 
-=head1 SEE ALSO
+# SEE ALSO
 
-L<Dancer>, L<Dancer2>, L<Mojolicious>, and of course, L<Catalyst>
+[Dancer](https://metacpan.org/pod/Dancer), [Dancer2](https://metacpan.org/pod/Dancer2), [Mojolicious](https://metacpan.org/pod/Mojolicious), and of course, [Catalyst](https://metacpan.org/pod/Catalyst)
 
-=head1 DESCRIPTION
+# DESCRIPTION
 
 ZofCMS stands for "Zoffix's Content Management System", however I prefer
 it to be just a name. It is a small web framework/templating system designed
 to be easily installed and workable on limited severs, i.e. the ones that do
 not allow you to install perl modules from CPAN, don't have ssh and
 occasionally don't even offer any SQL databases. If you have more freedom
-than that you may want to give L<Catalyst> a try which, my opinion, is
+than that you may want to give [Catalyst](https://metacpan.org/pod/Catalyst) a try which, my opinion, is
 a great framework, not just for web, and it offers far more functionality
 than ZofCMS ever will.
 
 ZofCMS is plugin based. If you create your own plugins, please upload them
-to L<App::ZofCMS::Plugin> namespace or email it to me (C<zoffix@cpan.org>)
+to [App::ZofCMS::Plugin](https://metacpan.org/pod/App::ZofCMS::Plugin) namespace or email it to me (`zoffix@cpan.org`)
 and I will package it, upload it, and give you corresponding credits.
 
-ZofCMS currently uses L<HTML::Template> as a module to interpret HTML
+ZofCMS currently uses [HTML::Template](https://metacpan.org/pod/HTML::Template) as a module to interpret HTML
 templates. And so far, I have no plans to change this to anything alike
-L<Template::Toolkit>.
+[Template::Toolkit](https://metacpan.org/pod/Template::Toolkit).
 
 Despite the "core" of the framework along with all of its plugins being
-on CPAN there is a helper script (C<zofcms_helper>) which can produce
+on CPAN there is a helper script (`zofcms_helper`) which can produce
 a ready-for-upload set of files which you can simply upload to your server
 without having to install anything from CPAN on the server itself. See
-C<perldoc zofcms_helper>.
+`perldoc zofcms_helper`.
 
-=head1 HISTORY
+# HISTORY
 
 This section does not say anything useful, you can skip it if you are
 not interested in what made me create ZofCMS.
 
 For about two-three years name "ZofCMS" lived more as a joke. A lot of
-people in IRC channels such as C<#css> would ask me what web framework
+people in IRC channels such as `#css` would ask me what web framework
 I use (I didn't use any at the time) and I would gladly say "I use ZofCMS"
 instead of the expected "Drupal" or "Wordpress".
 
@@ -73,7 +58,7 @@ After coding a templating system from scratch for
 one of the sites, which runs on the server without any SQL, ssh
 or ability to install any perl modules directly from CPAN, I already felt
 that something needed to be done. The "perl hashref" templates which I used
-to make all those products displayed with only one L<HTML::Template>
+to make all those products displayed with only one [HTML::Template](https://metacpan.org/pod/HTML::Template)
 template proved to be flexible, extendable and maintainable and that's
 exactly from where ZofCMS template format came.
 
@@ -99,86 +84,86 @@ was prepared for anything which is to be thrown on that site and was
 confident that I will no longer have to hack around existing Perl code
 on the site.
 
-"What about L<Catalyst>?", you may ask. Well, here is my answer.
-L<Catalyst> is GREAT! I love it. It's magic. But even on
-L<http://zoffix.com/>, which allows me to easily install modules directly
+"What about [Catalyst](https://metacpan.org/pod/Catalyst)?", you may ask. Well, here is my answer.
+[Catalyst](https://metacpan.org/pod/Catalyst) is GREAT! I love it. It's magic. But even on
+[http://zoffix.com/](http://zoffix.com/), which allows me to easily install modules directly
 from CPAN AND gives me ssh access, I spent quite some time deploying
 my Catalyst application. As I am not creating very large sites at work
 (or at home for that matter) I feel that Catalyst is an overkill for what
 I do. I definitely recommend Catalyst to everyone. We make our own choices
-- I am happy with the ones I've made.
+\- I am happy with the ones I've made.
 
-=head1 HOW DOES IT WORK
+# HOW DOES IT WORK
 
-There is a single C<index.pl> script. The page to display is specified
-via C<page> query parameter (it can come from either POST or GET requests).
-There is also a C<dir> parameter, but it's use it optional. For example,
-if you are to access C<index.pl?page=foo/bar/baz/page> framework will
-convert the query into C<page=page&dir=foo/bar/baz/>.
+There is a single `index.pl` script. The page to display is specified
+via `page` query parameter (it can come from either POST or GET requests).
+There is also a `dir` parameter, but it's use it optional. For example,
+if you are to access `index.pl?page=foo/bar/baz/page` framework will
+convert the query into `page=page&dir=foo/bar/baz/`.
 
-The "config file" (see L<App::ZofCMS::Config>) is loaded and checked whether
+The "config file" (see [App::ZofCMS::Config](https://metacpan.org/pod/App::ZofCMS::Config)) is loaded and checked whether
 or not the specified page is an "allowed page"; if it isn't, user will
 be presented with a 404.
 
 Later on, the "ZofCMS template" file is located and loaded. This template
 is just a file with a Perl hashref in it. All keys have special meanings,
-see L<App::ZofCMS::Template> for details. Some (or even all) of those keys
+see [App::ZofCMS::Template](https://metacpan.org/pod/App::ZofCMS::Template) for details. Some (or even all) of those keys
 can be specified in the "config file" under several keys which provide
-"defaults", see L<App::ZofCMS::Config> for details.
+"defaults", see [App::ZofCMS::Config](https://metacpan.org/pod/App::ZofCMS::Config) for details.
 
 ZofCMS template will reference a "base" template (which is a
-L<HTML::Template> template) as well as several other L<HTML::Template>
+[HTML::Template](https://metacpan.org/pod/HTML::Template) template) as well as several other [HTML::Template](https://metacpan.org/pod/HTML::Template)
 files. The framework then will run any plugins, fill out all the values
 in the templates and display the page to the user.
 
-=head1 USING THE FRAMEWORK
+# USING THE FRAMEWORK
 
-=head2 FIRST TIME USE
+## FIRST TIME USE
 
 Ok, if you are reading this I can assume you want to give ZofCMS a whirl.
 This documentation describes how to install/use it from CPAN. I am also
-planing to put up a ZofCMS tarball on L<http://web-tools.cc/tools/ZofCMS/>
+planing to put up a ZofCMS tarball on [http://web-tools.cc/tools/ZofCMS/](http://web-tools.cc/tools/ZofCMS/)
 from which you can get started without touching CPAN (for the most part).
 At the time of this writing that webpage is not yet up.
 
-First of all, install C<App::ZofCMS> "module" via your cpan script. If you
+First of all, install `App::ZofCMS` "module" via your cpan script. If you
 don't know how to do that, read
-L<http://novosial.org/perl/life-with-cpan/index.html>. This will install ZofCMS
+[http://novosial.org/perl/life-with-cpan/index.html](http://novosial.org/perl/life-with-cpan/index.html). This will install ZofCMS
 "core" along with with helper script. Detailed description of helper
-script can be found by running C<perldoc zofcms_helper>.
+script can be found by running `perldoc zofcms_helper`.
 
-=head2 INITIAL SETUP
+## INITIAL SETUP
 
 Pick a directory in which you want to create ZofCMS "base" from which
 you would start working on your site. This documentation assumes that you
 are doing all this on a local, fully functional box.
 
 ZofCMS directory/file setup is arranged to have one directory web
-accessible; that one will contain C<index.pl> along with any CSS/JS files
+accessible; that one will contain `index.pl` along with any CSS/JS files
 or images that will be on your website. Another directory will not be
 web accessible; here you will keep your ZofCMS templates along with page
-templates (i.e. L<HTML::Template>, or "data") and the config file.
+templates (i.e. [HTML::Template](https://metacpan.org/pod/HTML::Template), or "data") and the config file.
 
-As example we will want our site to be in C</var/www/testsite/> directory,
-thus we go (assuming we are on the system which has C<mkdir> and C<cd>):
+As example we will want our site to be in `/var/www/testsite/` directory,
+thus we go (assuming we are on the system which has `mkdir` and `cd`):
 
     mkdir /var/www/testsite;
     cd /var/www/testsite/;
     zofcms_helper --site web;
 
-Details about C<zofcms_helper> script can be found in
-C<perldoc zofcms_helper>. In this example, the helper script created two
-directories C</var/www/testsite/web/> and C</var/www/testsite/web_site/>.
-The C<web> directory is what we would have as web accessible (containing
-C<index.pl>) and C<web_site> is what would contain ZofCMS "core".
+Details about `zofcms_helper` script can be found in
+`perldoc zofcms_helper`. In this example, the helper script created two
+directories `/var/www/testsite/web/` and `/var/www/testsite/web_site/`.
+The `web` directory is what we would have as web accessible (containing
+`index.pl`) and `web_site` is what would contain ZofCMS "core".
 
-The helper script stuffed a single file, C<index.pl> into
-C</var/www/testsite/web/> directory and that's the only thing that ZofCMS
-cares about from that directory. B<Note:> make sure to remove the line
-C<use CGI::Carp qw/fatalsToBrowser/;> from C<index.pl> before deploying
-your finished site live. See C<CGI::Carp> for more information.
+The helper script stuffed a single file, `index.pl` into
+`/var/www/testsite/web/` directory and that's the only thing that ZofCMS
+cares about from that directory. __Note:__ make sure to remove the line
+`use CGI::Carp qw/fatalsToBrowser/;` from `index.pl` before deploying
+your finished site live. See `CGI::Carp` for more information.
 
-The C</var/www/testsite/web_site/> has more goodies in it. Here is what we
+The `/var/www/testsite/web_site/` has more goodies in it. Here is what we
 have in here:
 
     data        - here you would put your HTML::Template templates which
@@ -190,29 +175,29 @@ have in here:
                   any "template exec modules" (more on that later)
                   will live.
 
-In the C<data> directory you will notice a file called C<base.tmpl> this
-is the "base" L<HTML::Template> file, it will be filled with virtually
-all the keys from ZofCMS template. In the C<templates> directory you will
-find C<index.tmpl> and C<404.tmpl>
+In the `data` directory you will notice a file called `base.tmpl` this
+is the "base" [HTML::Template](https://metacpan.org/pod/HTML::Template) file, it will be filled with virtually
+all the keys from ZofCMS template. In the `templates` directory you will
+find `index.tmpl` and `404.tmpl`
 
-B<Before we proceed any further> I advise you to read documentation
-for L<App::ZofCMS::Config> and L<App::ZofCMS::Template> as I am not going
+__Before we proceed any further__ I advise you to read documentation
+for [App::ZofCMS::Config](https://metacpan.org/pod/App::ZofCMS::Config) and [App::ZofCMS::Template](https://metacpan.org/pod/App::ZofCMS::Template) as I am not going
 to explain what each key means; it is explained in aforementioned
 documentation in detail.
 
-=head2 FIRST PAGE
+## FIRST PAGE
 
 Now, let's create our first page. Let it be named something original,
 like "foo" :)
 
 Open up your config file and under valid pages add '/foo'. Considering
-you *did* read documentation for L<App::ZofCMS::Config> you'll know exactly
+you \*did\* read documentation for [App::ZofCMS::Config](https://metacpan.org/pod/App::ZofCMS::Config) you'll know exactly
 what to do at this point.
 
-now go to your "core dir" (which will be /var/www/testsite/web_site/
+now go to your "core dir" (which will be /var/www/testsite/web\_site/
 if you followed (and able to execute) the helper script example from
 INITIAL SETUP section above. Go to to directory "templates" and create
-a file named C<foo.tmpl>, in that file enter the following:
+a file named `foo.tmpl`, in that file enter the following:
 
     {
         title       => 'Hello World',
@@ -222,39 +207,36 @@ a file named C<foo.tmpl>, in that file enter the following:
         }
     }
 
-Now go to "data directory" and create a new file named C<foo.tmpl> and
+Now go to "data directory" and create a new file named `foo.tmpl` and
 enter the following into it:
 
     <p>Current time is: <tmpl_var name="cur_time">
 
 Providing you did not edit anything else in your config file and did not
-touch C<base.tmpl> file in your "data directory" you can now access
+touch `base.tmpl` file in your "data directory" you can now access
 your web application and see a page which will display current time.
-How wonderful \o/
+How wonderful \\o/
 
-=head1 REPOSITORY
+# REPOSITORY
 
 Fork this module on GitHub:
-L<https://github.com/zoffixznet/App-ZofCMS>
+[https://github.com/zoffixznet/App-ZofCMS](https://github.com/zoffixznet/App-ZofCMS)
 
-=head1 BUGS
+# BUGS
 
 To report bugs or request features, please use
-L<https://github.com/zoffixznet/App-ZofCMS/issues>
+[https://github.com/zoffixznet/App-ZofCMS/issues](https://github.com/zoffixznet/App-ZofCMS/issues)
 
 If you can't access GitHub, you can email your request
-to C<bug-App-ZofCMS at rt.cpan.org>
+to `bug-App-ZofCMS at rt.cpan.org`
 
-=head1 AUTHOR
+# AUTHOR
 
 Zoffix Znet <zoffix at cpan.org>
-(L<http://zoffix.com/>, L<http://haslayout.net/>)
+([http://zoffix.com/](http://zoffix.com/), [http://haslayout.net/](http://haslayout.net/))
 
-=head1 LICENSE
+# LICENSE
 
 You can use and distribute this module under the same terms as Perl itself.
-See the C<LICENSE> file included in this distribution for complete
+See the `LICENSE` file included in this distribution for complete
 details.
-
-=cut
-
