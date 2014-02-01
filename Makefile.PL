@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use 5.006;
+use 5.008;
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -22,9 +22,41 @@ my %WriteMakefileArgs = (
   "NAME" => "App::ZofCMS",
   "PREREQ_PM" => {
     "CGI" => 0,
+    "CSS::Minifier" => 0,
     "Carp" => 0,
+    "DBI" => 0,
+    "Data::Dumper" => 0,
+    "Data::Transformer" => 0,
+    "Digest::MD5" => 0,
+    "File::Glob" => 0,
     "File::Spec" => 0,
+    "File::Spec::Functions" => 0,
+    "GD::Barcode" => 0,
+    "HTML::Entities" => 0,
     "HTML::Template" => 0,
+    "Image::Size" => 0,
+    "JavaScript::Minifier" => 0,
+    "LWP::UserAgent" => 0,
+    "List::Util" => 0,
+    "MIME::Lite" => 0,
+    "MIME::Types" => 0,
+    "Mail::Send" => 0,
+    "Spreadsheet::DataToExcel" => 0,
+    "Storable" => 0,
+    "Syntax::Highlight::CSS" => 0,
+    "Syntax::Highlight::HTML" => 0,
+    "Test::Builder::Module" => 0,
+    "Time::Local" => 0,
+    "URI" => 0,
+    "URI::Escape" => 0,
+    "URI::Find::Schemeless" => 0,
+    "WWW::BashOrg" => 0,
+    "WWW::GetPageTitle" => 0,
+    "WWW::Google::Calculator" => 0,
+    "WWW::Google::PageRank" => 0,
+    "WWW::Google::Time" => 0,
+    "WebService::Validator::HTML::W3C" => 0,
+    "base" => 0,
     "strict" => 0,
     "warnings" => 0
   },
@@ -34,7 +66,7 @@ my %WriteMakefileArgs = (
     "IPC::Open3" => 0,
     "Test::More" => 0
   },
-  "VERSION" => "1.001001",
+  "VERSION" => "1.001002",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -43,12 +75,44 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "CGI" => 0,
+  "CSS::Minifier" => 0,
   "Carp" => 0,
+  "DBI" => 0,
+  "Data::Dumper" => 0,
+  "Data::Transformer" => 0,
+  "Digest::MD5" => 0,
+  "File::Glob" => 0,
   "File::Spec" => 0,
+  "File::Spec::Functions" => 0,
+  "GD::Barcode" => 0,
+  "HTML::Entities" => 0,
   "HTML::Template" => 0,
   "IO::Handle" => 0,
   "IPC::Open3" => 0,
+  "Image::Size" => 0,
+  "JavaScript::Minifier" => 0,
+  "LWP::UserAgent" => 0,
+  "List::Util" => 0,
+  "MIME::Lite" => 0,
+  "MIME::Types" => 0,
+  "Mail::Send" => 0,
+  "Spreadsheet::DataToExcel" => 0,
+  "Storable" => 0,
+  "Syntax::Highlight::CSS" => 0,
+  "Syntax::Highlight::HTML" => 0,
+  "Test::Builder::Module" => 0,
   "Test::More" => 0,
+  "Time::Local" => 0,
+  "URI" => 0,
+  "URI::Escape" => 0,
+  "URI::Find::Schemeless" => 0,
+  "WWW::BashOrg" => 0,
+  "WWW::GetPageTitle" => 0,
+  "WWW::Google::Calculator" => 0,
+  "WWW::Google::PageRank" => 0,
+  "WWW::Google::Time" => 0,
+  "WebService::Validator::HTML::W3C" => 0,
+  "base" => 0,
   "strict" => 0,
   "warnings" => 0
 );
