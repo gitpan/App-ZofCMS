@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::FileToTemplate;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 use Data::Transformer;
 use File::Spec;
@@ -74,7 +74,7 @@ In you L<HTML::Template> template:
 The module is a plugin for L<App::ZofCMS>; it provides functionality to either read (slurp)
 or C<do()> files and stick them in place of "tags".. read on to understand more.
 
-This documeantation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and
+This documentation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and
 L<App::ZofCMS::Template>
 
 =head1 ADDING THE PLUGIN

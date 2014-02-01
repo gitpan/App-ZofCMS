@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::AutoDump;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 use Data::Dumper;
 
@@ -46,7 +46,7 @@ query parameters and ZofCMS Template hashref
 The module is a plugin for L<App::ZofCMS> that provides means to quickly use L<Data::Dumper>
 to dump query parameters hashref as well as ZofCMS Template hashref.
 
-This documeantation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and L<App::ZofCMS::Template>
+This documentation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and L<App::ZofCMS::Template>
 
 =head1 HOW TO USE
 

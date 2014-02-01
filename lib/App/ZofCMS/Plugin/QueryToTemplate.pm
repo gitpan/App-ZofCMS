@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::QueryToTemplate;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 sub new { bless {}, shift; }
 

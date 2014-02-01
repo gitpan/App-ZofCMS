@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::AutoIMGSize;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 use HTML::Entities;
 use Image::Size (qw/html_imgsize/);
@@ -89,7 +89,7 @@ of the image from the file. Personally, I use it in templates where the size of 
 image is unknown, if the image is static and you can physically type in the address, it would
 be saner to do so.
 
-This documeantation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and L<App::ZofCMS::Template>
+This documentation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config> and L<App::ZofCMS::Template>
 
 =head1 MAIN CONFIG FILE OR ZofCMS TEMPLATE KEYS
 

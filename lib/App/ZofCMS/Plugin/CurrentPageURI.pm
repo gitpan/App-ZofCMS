@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::CurrentPageURI;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 use URI::Escape;
 
@@ -106,7 +106,7 @@ webroot-relative URI, webroot-relative URI with query parameters
 attached, and finally the full URI (with the protocol, domain name,
 and query parameters).
 
-This documeantation assumes you've read
+This documentation assumes you've read
 L<App::ZofCMS>, L<App::ZofCMS::Config> and L<App::ZofCMS::Template>
 
 =head1 FIRST-LEVEL ZofCMS TEMPLATE KEYS
@@ -218,7 +218,7 @@ defaults are used, the output will be:
 
 Plugin adds three variables into C<{t}> ZofCMS Template special key,
 for you to use in your L<HTML::Template> Template. Below their
-default names are shown; plugin's argumeant C<prefix> specifies the
+default names are shown; plugin's argument C<prefix> specifies the
 string to prepend to these default names. Examples show output
 when current page's URI is C<http://zcms/?text=lalala>.
 

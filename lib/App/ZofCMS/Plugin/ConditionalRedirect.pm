@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::ConditionalRedirect;
 use warnings;
 use strict;
 
-our $VERSION = '1.001002'; # VERSION
+our $VERSION = '1.001003'; # VERSION
 
 sub new { bless {}, shift }
 
@@ -46,7 +46,7 @@ The module is a plugin for L<App::ZofCMS>. It provides means to redirect user to
 depending on certain conditions, e.g. some key having a value in ZofCMS Template hashref or
 anything else, really.
 
-This documeantation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config>
+This documentation assumes you've read L<App::ZofCMS>, L<App::ZofCMS::Config>
 and L<App::ZofCMS::Template>
 
 =head1 MAIN CONFIG FILE AND ZofCMS TEMPLATE KEYS
@@ -58,7 +58,7 @@ and L<App::ZofCMS::Template>
     plugins => [ { UserLogin => 1000 }, { ConditionalRedirect => 2000 } ],
 
 The obvious is that you'd want to stick this plugin into the list of plugins to be
-executed. However, since functionality of this plugin can be easily implemeanted using
+executed. However, since functionality of this plugin can be easily implemented using
 C<exec> and C<exec_before> special keys in ZofCMS Template, being able to set the
 I<priority> to when the plugin should be run would probably one of the reasons for you
 to use this plugin (it was for me at least).
