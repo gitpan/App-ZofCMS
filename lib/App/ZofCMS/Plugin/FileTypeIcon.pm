@@ -4,7 +4,7 @@ use warnings;
 use strict;
 use File::Spec;
 
-our $VERSION = '1.001003'; # VERSION
+our $VERSION = '1.001004'; # VERSION
 
 use base 'App::ZofCMS::Plugin::Base';
 

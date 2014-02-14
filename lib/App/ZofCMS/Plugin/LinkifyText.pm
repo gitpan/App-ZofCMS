@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::LinkifyText;
 use warnings;
 use strict;
 
-our $VERSION = '1.001003'; # VERSION
+our $VERSION = '1.001004'; # VERSION
 
 use URI::Find::Schemeless;
 use HTML::Entities;

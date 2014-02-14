@@ -8,6 +8,15 @@ This module is just the main documentation for ZofCMS framework. See
 ["USING THE FRAMEWORK"](#using-the-framework) section below for explanation of how to use this
 framework.
 
+# WARNING
+
+I have no desire to continue development or maintenance of this framework.
+As far as I know, I am the only developer. My only ties to this
+framework is its use at $work and I am actively trying to switch
+to [Catalyst](https://metacpan.org/pod/Catalyst). For that reason,
+I strongly do NOT recommend you use this framework. Please see
+[Mojolicious](https://metacpan.org/pod/Mojolicious), [Dancer](https://metacpan.org/pod/Dancer), [Dancer2](https://metacpan.org/pod/Dancer2), or [Catalyst](https://metacpan.org/pod/Catalyst) as alternatives.
+
 # DESCRIPTION
 
 ZofCMS stands for "Zoffix's Content Management System", however I prefer
@@ -220,9 +229,6 @@ If you can't access GitHub, you can email your request
 to `bug-App-ZofCMS at rt.cpan.org`
 
 # AUTHOR
-
-Zoffix Znet <zoffix at cpan.org>
-([http://zoffix.com/](http://zoffix.com/), [http://haslayout.net/](http://haslayout.net/))
 
 # LICENSE
 

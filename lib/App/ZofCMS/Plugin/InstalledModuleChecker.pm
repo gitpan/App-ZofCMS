@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::InstalledModuleChecker;
 use warnings;
 use strict;
 
-our $VERSION = '1.001003'; # VERSION
+our $VERSION = '1.001004'; # VERSION
 
 sub new { bless {}, shift }
 sub process {

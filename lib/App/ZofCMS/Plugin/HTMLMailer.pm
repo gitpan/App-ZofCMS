@@ -7,7 +7,7 @@ use MIME::Lite;
 use HTML::Template;
 use File::Spec::Functions (qw/catfile/);
 
-our $VERSION = '1.001003'; # VERSION
+our $VERSION = '1.001004'; # VERSION
 
 sub _key { 'plug_htmlmailer' }
 

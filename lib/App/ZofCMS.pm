@@ -3,7 +3,7 @@ package App::ZofCMS;
 use warnings;
 use strict;
 
-our $VERSION = '1.001003'; # VERSION
+our $VERSION = '1.001004'; # VERSION
 
 1;
 __END__
@@ -19,6 +19,19 @@ App::ZofCMS - web framework and templating system for small-medium sites.
 This module is just the main documentation for ZofCMS framework. See
 L<USING THE FRAMEWORK> section below for explanation of how to use this
 framework.
+
+=head1 WARNING
+
+=for html  <div style="display: table; height: 91px; background: url(http://zoffix.com/CPAN/Dist-Zilla-Plugin-Pod-Spiffy/icons/section-warning.png) no-repeat left; padding-left: 120px;" ><div style="display: table-cell; vertical-align: middle;">
+
+I have no desire to continue development or maintenance of this framework.
+As far as I know, I am the only developer. My only ties to this
+framework is its use at $work and I am actively trying to switch
+to L<Catalyst>. For that reason,
+I strongly do NOT recommend you use this framework. Please see
+L<Mojolicious>, L<Dancer>, L<Dancer2>, or L<Catalyst> as alternatives.
+
+=for html  </div></div>
 
 =head1 DESCRIPTION
 
@@ -220,10 +233,16 @@ How wonderful \o/
 
 =head1 REPOSITORY
 
+=for html  <div style="display: table; height: 91px; background: url(http://zoffix.com/CPAN/Dist-Zilla-Plugin-Pod-Spiffy/icons/section-github.png) no-repeat left; padding-left: 120px;" ><div style="display: table-cell; vertical-align: middle;">
+
 Fork this module on GitHub:
 L<https://github.com/zoffixznet/App-ZofCMS>
 
+=for html  </div></div>
+
 =head1 BUGS
+
+=for html  <div style="display: table; height: 91px; background: url(http://zoffix.com/CPAN/Dist-Zilla-Plugin-Pod-Spiffy/icons/section-bugs.png) no-repeat left; padding-left: 120px;" ><div style="display: table-cell; vertical-align: middle;">
 
 To report bugs or request features, please use
 L<https://github.com/zoffixznet/App-ZofCMS/issues>
@@ -231,10 +250,15 @@ L<https://github.com/zoffixznet/App-ZofCMS/issues>
 If you can't access GitHub, you can email your request
 to C<bug-App-ZofCMS at rt.cpan.org>
 
+=for html  </div></div>
+
 =head1 AUTHOR
 
-Zoffix Znet <zoffix at cpan.org>
-(L<http://zoffix.com/>, L<http://haslayout.net/>)
+=for html  <div style="display: table; height: 91px; background: url(http://zoffix.com/CPAN/Dist-Zilla-Plugin-Pod-Spiffy/icons/section-author.png) no-repeat left; padding-left: 120px;" ><div style="display: table-cell; vertical-align: middle;">
+
+=for html   <span style="display: inline-block; text-align: center;"> <a href="http://metacpan.org/author/ZOFFIX"> <img src="http://www.gravatar.com/avatar/328e658ab6b08dfb5c106266a4a5d065?d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F627d83ef9879f31bdabf448e666a32d5" alt="ZOFFIX" style="display: block; margin: 0 3px 5px 0!important; border: 1px solid #666; border-radius: 3px; "> <span style="color: #333; font-weight: bold;">ZOFFIX</span> </a> </span>
+
+=for html  </div></div>
 
 =head1 LICENSE
 

@@ -7,6 +7,7 @@ use Test::More 0.88;
 use Test::NoTabs;
 
 my @files = (
+    'bin/zofcms_helper',
     'lib/App/ZofCMS.pm',
     'lib/App/ZofCMS/Config.pm',
     'lib/App/ZofCMS/Output.pm',
